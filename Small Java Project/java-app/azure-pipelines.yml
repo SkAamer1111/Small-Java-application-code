@@ -29,7 +29,8 @@ stages:
       displayName: Verify Tools
 
     - script: |
-        cd "Small Java Project/java-app"
+        pwd
+        cd "Small Java Project/java-app/"
         mvn clean package
       displayName: 'Maven Build'
     
@@ -41,7 +42,7 @@ stages:
         -Dsonar.login=$(sonar-token)
 
     - script: |
-        cd "Small Java Project/java-app"
+        cd "Small Java Project/java-app/"
         docker image build -t $(dockerHubUser)/$(imageRepository):$(Build.BuildId) .
       displayName: Build and Push Image
 
