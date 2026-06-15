@@ -5,9 +5,7 @@ pool:
   name: ec2-agent-pool
 
 variables:
-  imageRepository: springboot-app
-  dockerHubUser: shaikhaamer
-  imageTag: latest
+  - group: seceret-group
 
 stages:
 
@@ -37,10 +35,10 @@ stages:
     
     - script: |
         mvn clean verify sonar:sonar \
-        -Dsonar.projectKey=skaamer1111 \
-        -Dsonar.organization=SkAamer1111\
-        -Dsonar.host.url=https://sonarcloud.io \
-        -Dsonar.login=$(SONAR_TOKEN)
+        -Dsonar.projectKey=$projectKey \
+        -Dsonar.organization=$organization\
+        -Dsonar.host.url=$sonar-url \
+        -Dsonar.login=$sonar-token
 
     - script: |
         cd "Small Java Project/java-app"
