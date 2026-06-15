@@ -30,22 +30,14 @@ stages:
         docker --version
       displayName: Verify Tools
 
-    - task: Maven@4
-      displayName: Maven Build
-      inputs:
-        mavenPomFile: 'Small Java Project/java-app/pom.xml'
-        goals: 'clean package'
+    - script: |
+        cd "Small Java Project/java-app"
+        mvn clean package
+      displayName: 'Maven Build'
 
-    - task: Docker@2
+    - script: |
+        docker image build -t $(dockerHubUser)/$(imageRepository):$(Build.BuildId) .
       displayName: Build and Push Image
-      inputs:
-        containerRegistry: 'dockerhub-connection'
-        repository: '$(dockerHubUser)/$(imageRepository)'
-        command: 'buildAndPush'
-        Dockerfile: 'Small Java Project/java-app/Dockerfile'
-        tags: |
-          $(Build.BuildId)
-          latest
 
 # ==========================
 # DEPLOY STAGE
@@ -67,7 +59,7 @@ stages:
 
         echo "Pulling latest image..."
 
-        docker pull $(dockerHubUser)/$(imageRepository):latest
+        docker pull $(dockerHubUser)/$(imageRepository):$(Build.BuildId)
 
         echo "Starting new container..."
 
@@ -75,7 +67,7 @@ stages:
           --name springboot \
           -p 8080:8080 \
           --restart unless-stopped \
-          $(dockerHubUser)/$(imageRepository):latest
+          $(dockerHubUser)/$(imageRepository):$(Build.BuildId)
 
         docker ps
       displayName: Deploy Container
