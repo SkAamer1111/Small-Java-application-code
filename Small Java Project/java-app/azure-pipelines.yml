@@ -1,0 +1,27 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  imageRepository: springboot-app
+  dockerHubUser: shaikhaamer
+
+steps:
+
+- task: Maven@4
+  inputs:
+    mavenPomFile: pom.xml
+    goals: clean package
+    publishJUnitResults: true
+
+- task: Docker@2
+  inputs:
+    containerRegistry: dockerhub-connection
+    repository: $(dockerHubUser)/$(imageRepository)
+    command: buildAndPush
+    Dockerfile: Dockerfile
+    tags: |
+      $(Build.BuildId)
+      latest
