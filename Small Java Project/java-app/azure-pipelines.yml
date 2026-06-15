@@ -32,15 +32,7 @@ stages:
         cd "Small Java Project/java-app/"
         mvn clean package
       displayName: 'Maven Build'
-    
-    - script: |
-        cd "Small Java Project/java-app/"
-        mvn clean verify sonar:sonar \
-        -Dsonar.projectKey=skaamer1111 \
-        -Dsonar.organization=SkAamer1111 \
-        -Dsonar.host.url=https://sonarcloud.io \
-        -Dsonar.login=$(sonarToken)
-
+      
     - script: |
         cd "Small Java Project/java-app/"
         docker image build -t $(dockerHubUser)/$(imageRepository):$(Build.BuildId) .
