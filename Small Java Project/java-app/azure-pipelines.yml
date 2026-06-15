@@ -36,6 +36,7 @@ stages:
       displayName: 'Maven Build'
 
     - script: |
+        cd "Small Java Project/java-app"
         docker image build -t $(dockerHubUser)/$(imageRepository):$(Build.BuildId) .
       displayName: Build and Push Image
 
