@@ -42,7 +42,7 @@ stages:
         containerRegistry: 'dockerhub-connection'
         repository: '$(dockerHubUser)/$(imageRepository)'
         command: 'buildAndPush'
-        Dockerfile: 'Dockerfile'
+        Dockerfile: 'Small Java Project/java-app/Dockerfile'
         tags: |
           $(Build.BuildId)
           latest
